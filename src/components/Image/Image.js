@@ -38,8 +38,9 @@ class Image extends React.Component {
       backgroundImage: `url(${FlickrService.urlFromDto(this.props.dto)})`,
       width: size,
       height: size,
-      transform: `rotate(${this.state.deg}deg)`,
+      transform: `rotate(${this.state.deg}deg)`
     };
+
     const innerStyles = {
       transform: `rotate(-${this.state.deg}deg)`
     };
