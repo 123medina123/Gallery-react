@@ -40,12 +40,23 @@ class Gallery extends React.Component {
   }
 
   componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
     this.getImages(this.props.tag);
     this.setState({
       galleryWidth: document.body.clientWidth
     });
   }
 
+  componentWillUnmount() {
+     window.removeEventListener('resize', this.handleResize);
+   }
+
+   handleResize = () => {
+     this.setState({
+       galleryWidth: this.getGalleryWidth()
+     });
+   };
+   
   componentWillReceiveProps(props) {
     this.getImages(props.tag);
   }
