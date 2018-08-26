@@ -1,0 +1,39 @@
+.popup{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right:0;
+  bottom:0;
+  z-index: 10;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.75);
+  .image-icon{
+    color:white;
+    position: absolute;
+    font-size: 36px;
+    opacity: 1;
+    cursor: pointer;
+    transition: 0.3s opacity ease;
+    opacity: 0.75;
+    &.close{
+      top:50px;
+      right: 50px;
+    }
+    &.prev{
+      left:30px;
+      top: 50%;
+      transform:translate(0,-50%);
+    }
+    &.next{
+      right:30px;
+      top: 50%;
+      transform:translate(0,-50%);
+    }
+    &:hover{
+      opacity: 1;
+    }
+  }
+
+}

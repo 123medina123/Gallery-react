@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import Image from '../Image';
+import Popup from '../Popup';
+import FlickrService from '../../services/FlickrService';
 import './Gallery.scss';
 
 class Gallery extends React.Component {
@@ -13,7 +14,8 @@ class Gallery extends React.Component {
     super(props);
     this.state = {
       images: [],
-      galleryWidth: this.getGalleryWidth()
+      galleryWidth: this.getGalleryWidth(),
+      popupIndex: -1
     };
   }
 
@@ -24,24 +26,16 @@ class Gallery extends React.Component {
       return 1000;
     }
   }
+
   getImages(tag) {
-    const getImagesUrl = `services/rest/?method=flickr.photos.search&api_key=522c1f9009ca3609bcbaf08545f067ad&tags=${tag}&tag_mode=any&per_page=100&format=json&safe_search=1&nojsoncallback=1`;
-    const baseUrl = 'https://api.flickr.com/';
-    axios({
-      url: getImagesUrl,
-      baseURL: baseUrl,
-      method: 'GET'
-    })
-      .then(res => res.data)
-      .then(res => {
-        if (
-          res &&
-          res.photos &&
-          res.photos.photo &&
-          res.photos.photo.length > 0
-        ) {
-          this.setState({images: res.photos.photo});
-        }
+    FlickrService.fetchImages(tag)
+      .then(images => {
+        this.setState(prevState => ({
+          images: [
+            ...prevState.images,
+            ...images
+          ]
+        }));
       });
   }
 
@@ -56,6 +50,36 @@ class Gallery extends React.Component {
     this.getImages(props.tag);
   }
 
+  popupCloseHandler = () => {
+    this.setState({
+      popupIndex: -1
+    });
+  };
+
+  popupNextHandler = () => {
+    this.setState(prevState => ({
+      popupIndex: prevState.popupIndex + 1
+    }));
+  };
+
+  popupPrevHandler = () => {
+    this.setState(prevState => ({
+      popupIndex: prevState.popupIndex - 1
+    }));
+  };
+
+  renderPopup = () => {
+    const {popupIndex, images} = this.state;
+    return popupIndex > -1 && (
+      <Popup
+        dto={images[popupIndex]}
+        onClose={this.popupCloseHandler}
+        onNext={this.popupNextHandler}
+        onPrev={this.popupPrevHandler}
+      />
+    );
+  };
+
   deleteHandler = index => {
     this.setState(prevState => ({
       images: [
@@ -65,18 +89,26 @@ class Gallery extends React.Component {
     }));
   };
 
+  expandHandler = index => {
+    this.setState({
+      popupIndex: index
+    });
+  };
+
   renderImage = (dto, index) => (
     <Image
       key={`image-${dto.id}`}
       dto={dto}
       galleryWidth={this.state.galleryWidth}
       onDelete={() => this.deleteHandler(index)}
+      onExpand={() => this.expandHandler(index)}
     />
   );
 
   render() {
     return (
       <div className="gallery-root">
+      {this.renderPopup()}
       {this.state.images.map(this.renderImage)}
       </div>
     );
