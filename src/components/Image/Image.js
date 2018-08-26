@@ -33,10 +33,6 @@ class Image extends React.Component {
     });
   };
 
-  componentDidMount() {
-    this.calcImageSize();
-  }
-
   render() {
     const size = this.calcImageSize();
     const rootStyles = {

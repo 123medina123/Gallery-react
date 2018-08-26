@@ -10,6 +10,9 @@ class Gallery extends React.Component {
     tag: PropTypes.string
   };
 
+  page = 1;
+  loading = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +31,8 @@ class Gallery extends React.Component {
   }
 
   getImages(tag) {
-    FlickrService.fetchImages(tag)
+    this.loading = true;
+    FlickrService.fetchImages(tag,this.page)
       .then(images => {
         this.setState(prevState => ({
           images: [
@@ -36,11 +40,13 @@ class Gallery extends React.Component {
             ...images
           ]
         }));
+        this.loading = false;
       });
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
+    window.addEventListener('scroll', this.handleScroll);
     this.getImages(this.props.tag);
     this.setState({
       galleryWidth: document.body.clientWidth
@@ -49,17 +55,32 @@ class Gallery extends React.Component {
 
   componentWillUnmount() {
      window.removeEventListener('resize', this.handleResize);
+     window.removeEventListener('scroll', this.handleScroll);
    }
 
-   handleResize = () => {
+  componentWillReceiveProps(props) {
+     this.page = 1;
+     this.setState({images: []});
+     this.getImages(props.tag);
+   }
+
+  handleResize = () => {
      this.setState({
        galleryWidth: this.getGalleryWidth()
      });
    };
-   
-  componentWillReceiveProps(props) {
-    this.getImages(props.tag);
-  }
+
+  shouldLoadMore() {
+     return window.innerHeight + window.pageYOffset >=
+     document.body.offsetHeight - 500;
+   }
+
+  handleScroll = () => {
+     if (!this.loading && this.shouldLoadMore()) {
+       this.page++;
+       this.getImages(this.props.tag);
+     }
+   };
 
   popupCloseHandler = () => {
     this.setState({

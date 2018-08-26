@@ -1,12 +1,11 @@
 import axios from 'axios';
 
 class FlickrService {
-  
   static urlFromDto(dto) {
     return `https://farm${dto.farm}.staticflickr.com/${dto.server}/${dto.id}_${dto.secret}.jpg`;
   }
 
-  static fetchImages(tag) {
+  static fetchImages(tag,page) {
       const baseUrl = 'https://api.flickr.com/';
       const imagesUrl = 'services/rest/?method=flickr.photos.search' +
         '&api_key=522c1f9009ca3609bcbaf08545f067ad' +
@@ -15,7 +14,8 @@ class FlickrService {
         '&format=json' +
         '&safe_search=1' +
         '&nojsoncallback=1' +
-        `&tags=${tag}`;
+        `&tags=${tag}` +
+        `&page=${page}`;
 
       return axios({
         url: imagesUrl,
