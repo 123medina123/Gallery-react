@@ -14,7 +14,6 @@ class Image extends React.Component {
 
   constructor(props) {
     super(props);
-    this.calcImageSize = this.calcImageSize.bind(this);
     this.state = {
       deg: 0
     };
@@ -40,12 +39,6 @@ class Image extends React.Component {
       width: size,
       height: size,
       transform: `rotate(${this.state.deg}deg)`,
-      opacity: 0;
-      -webkit-animation: fadein 2s, /* Safari, Chrome and Opera > 12.1 */
-           -moz-animation: fadein 2s, /* Firefox < 16 */
-            -ms-animation: fadein 2s, /* Internet Explorer */
-             -o-animation: fadein 2s, /* Opera < 12.1 */
-                animation: fadein 2s,
     };
     const innerStyles = {
       transform: `rotate(-${this.state.deg}deg)`
