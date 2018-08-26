@@ -1,9 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
 import FlickrService from '../../services/FlickrService';
 import './Popup.scss';
 
 class Popup extends React.Component {
+  static propTypes = {
+    dto: PropTypes.object,
+    onClose: PropTypes.func,
+    onNext: PropTypes.func,
+    onPrev: PropTypes.func
+  };
   render() {
     return (
       <div className="popup"
