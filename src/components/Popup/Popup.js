@@ -11,6 +11,7 @@ class Popup extends React.Component {
     onNext: PropTypes.func,
     onPrev: PropTypes.func
   };
+  
   render() {
     return (
       <div className="popup"
