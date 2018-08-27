@@ -33,12 +33,16 @@ class Image extends React.Component {
     });
   };
 
-  render() {
+  starClickHandler = () => {
+    const {isStarred,onStarred} = this.props;
+    onStarred(!isStarred)
+  }
 
+  render() {
     const {dto,onDelete,onExpand,connectDragSource,
           connectDropTarget,
           isDragging,
-          isHovered} = this.props;
+          isHovered,onStarred,isStarred} = this.props;
     const size = this.calcImageSize();
     const rootStyles = {
       backgroundImage: `url(${FlickrService.urlFromDto(dto)})`,
@@ -48,6 +52,9 @@ class Image extends React.Component {
     };
     const innerStyles = {
       transform: `rotate(-${this.state.deg}deg)`
+    };
+    const starStyle ={
+      color: isStarred ? 'yellow' : 'white'
     };
     const classes = ['image-root'];
     if (isHovered) {
@@ -63,6 +70,7 @@ class Image extends React.Component {
           <FontAwesome className="image-icon" name="sync-alt" title="rotate" onClick={this.rotateHandler}/>
           <FontAwesome className="image-icon" name="trash-alt" title="delete" onClick={onDelete}/>
           <FontAwesome className="image-icon" name="expand" title="expand" onClick={onExpand}/>
+          <FontAwesome className="image-icon" style={starStyle} name="star" title="star"  onClick={this.starClickHandler}/>
         </div>
       </div>
     )));

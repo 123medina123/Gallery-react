@@ -20,7 +20,8 @@ class Gallery extends React.Component {
     this.state = {
       images: [],
       galleryWidth: this.getGalleryWidth(),
-      popupIndex: -1
+      popupIndex: -1,
+      stars:{}
     };
   }
 
@@ -132,6 +133,16 @@ class Gallery extends React.Component {
     );
   };
 
+  handleStar = (id, isStarred) => {
+    this.setState(prevState => ({
+      stars: {
+        ...prevState.stars,
+        [id]: isStarred
+      }
+      })
+    );
+  }
+
   deleteHandler = index => {
     this.setState(prevState => ({
       images: [
@@ -155,10 +166,13 @@ class Gallery extends React.Component {
       onDelete={() => this.deleteHandler(index)}
       onExpand={() => this.expandHandler(index)}
       onReorder={this.handleReorder}
+      onStarred={(isStarred) => this.handleStar(dto.id,isStarred)}
+      isStarred={this.state.stars[dto.id]}
     />
   );
 
   render() {
+    console.log(this.state.stars);
     return (
       <div className="gallery-root">
       {this.renderPopup()}
