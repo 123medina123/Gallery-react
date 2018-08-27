@@ -24,17 +24,14 @@ class Popup extends React.Component {
       >
         <div>
           <FontAwesome className="image-icon close" name="times" title="close" onClick={this.props.onClose} />
-{
-  showNextButton &&
-  <FontAwesome className="image-icon next" name="chevron-right" title="next"  onClick={this.props.onNext} />
-
-}
-
+          {
+            showNextButton &&
+            <FontAwesome className="image-icon next" name="chevron-right" title="next"  onClick={this.props.onNext} />
+          }
           {
             showPrevButton &&
-              <FontAwesome className="image-icon prev" name="chevron-left" title="prev"  onClick={this.props.onPrev}/>
+            <FontAwesome className="image-icon prev" name="chevron-left" title="prev"  onClick={this.props.onPrev}/>
           }
-
         </div>
       </div>
     );

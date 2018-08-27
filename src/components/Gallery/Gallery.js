@@ -1,4 +1,6 @@
 import React from 'react';
+import {DragDropContext} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import PropTypes from 'prop-types';
 import Image from '../Image';
 import Popup from '../Popup';
@@ -20,6 +22,22 @@ class Gallery extends React.Component {
       galleryWidth: this.getGalleryWidth(),
       popupIndex: -1
     };
+  }
+
+  handleReorder = (from, to) => {
+     this.setState(prevState => {
+       const images = prevState.images.slice();
+       const temp = images[this.findImageIndex(from)];
+       images.splice(this.findImageIndex(from), 1);
+       images.splice(this.findImageIndex(to), 0, temp);
+       return {
+         images
+       };
+     });
+   };
+
+  findImageIndex(id) {
+     return this.state.images.findIndex(image => image.id == id);
   }
 
   getGalleryWidth(){
@@ -136,6 +154,7 @@ class Gallery extends React.Component {
       galleryWidth={this.state.galleryWidth}
       onDelete={() => this.deleteHandler(index)}
       onExpand={() => this.expandHandler(index)}
+      onReorder={this.handleReorder}
     />
   );
 
@@ -149,4 +168,4 @@ class Gallery extends React.Component {
   }
 }
 
-export default Gallery;
+export default DragDropContext(HTML5Backend)(Gallery);
