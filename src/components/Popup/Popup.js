@@ -9,10 +9,13 @@ class Popup extends React.Component {
     dto: PropTypes.object,
     onClose: PropTypes.func,
     onNext: PropTypes.func,
-    onPrev: PropTypes.func
+    onPrev: PropTypes.func,
+    showPrevButton: PropTypes.bool,
+    showNextButton: PropTypes.bool
   };
-  
+
   render() {
+    const {showNextButton,showPrevButton} = this.props;
     return (
       <div className="popup"
       style={{
@@ -21,8 +24,17 @@ class Popup extends React.Component {
       >
         <div>
           <FontAwesome className="image-icon close" name="times" title="close" onClick={this.props.onClose} />
-          <FontAwesome className="image-icon next" name="chevron-right" title="next"  onClick={this.props.onNext} />
-          <FontAwesome className="image-icon prev" name="chevron-left" title="prev"  onClick={this.props.onPrev}/>
+{
+  showNextButton &&
+  <FontAwesome className="image-icon next" name="chevron-right" title="next"  onClick={this.props.onNext} />
+
+}
+
+          {
+            showPrevButton &&
+              <FontAwesome className="image-icon prev" name="chevron-left" title="prev"  onClick={this.props.onPrev}/>
+          }
+
         </div>
       </div>
     );

@@ -108,6 +108,8 @@ class Gallery extends React.Component {
         onClose={this.popupCloseHandler}
         onNext={this.popupNextHandler}
         onPrev={this.popupPrevHandler}
+        showPrevButton={popupIndex > 0}
+        showNextButton={popupIndex < images.length - 1}
       />
     );
   };
