@@ -78,9 +78,11 @@ class Gallery extends React.Component {
    }
 
   componentWillReceiveProps(props) {
+    if(props.tag !== this.props.tag) {
      this.page = 1;
-     if(!props.showSaved) this.setState({images: []});
+     this.setState({images: []});
      this.getImages(props.tag);
+    }
    }
 
   handleResize = () => {
