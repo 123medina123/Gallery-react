@@ -138,9 +138,8 @@ class Gallery extends React.Component {
       stars: {
         ...prevState.stars,
         [id]: isStarred
-      }
-      })
-    );
+        }
+      }));
   }
 
   deleteHandler = index => {
@@ -172,7 +171,6 @@ class Gallery extends React.Component {
   );
 
   render() {
-    console.log(this.state.stars);
     return (
       <div className="gallery-root">
       {this.renderPopup()}
