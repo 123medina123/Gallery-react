@@ -33,16 +33,16 @@ class Image extends React.Component {
     });
   };
 
-  starClickHandler = () => {
-    const {isStarred,onStarred} = this.props;
-    onStarred(!isStarred)
+  saveClickHandler = () => {
+    const {isSaved,onSaved} = this.props;
+    onSaved(!isSaved)
   }
 
   render() {
     const {dto,onDelete,onExpand,connectDragSource,
           connectDropTarget,
           isDragging,
-          isHovered,onStarred,isStarred} = this.props;
+          isHovered,isSaved} = this.props;
     const size = this.calcImageSize();
     const rootStyles = {
       backgroundImage: `url(${FlickrService.urlFromDto(dto)})`,
@@ -53,8 +53,8 @@ class Image extends React.Component {
     const innerStyles = {
       transform: `rotate(-${this.state.deg}deg)`
     };
-    const starStyle ={
-      color: isStarred ? 'yellow' : 'white'
+    const saveStyle ={
+      color: isSaved  ? 'blue' : 'white'
     };
     const classes = ['image-root'];
     if (isHovered) {
@@ -63,14 +63,13 @@ class Image extends React.Component {
     if (isDragging) {
       classes.push('dragging');
     }
-
     return connectDropTarget(connectDragSource((
       <div className={classes.join(' ')} style={rootStyles}>
         <div style={innerStyles}>
           <FontAwesome className="image-icon" name="sync-alt" title="rotate" onClick={this.rotateHandler}/>
           <FontAwesome className="image-icon" name="trash-alt" title="delete" onClick={onDelete}/>
           <FontAwesome className="image-icon" name="expand" title="expand" onClick={onExpand}/>
-          <FontAwesome className="image-icon" style={starStyle} name="star" title="star"  onClick={this.starClickHandler}/>
+          <FontAwesome className="image-icon" style={saveStyle} name="save" title="save"  onClick={this.saveClickHandler}/>
         </div>
       </div>
     )));

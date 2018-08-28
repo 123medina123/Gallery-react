@@ -21,7 +21,7 @@ class Gallery extends React.Component {
       images: [],
       galleryWidth: this.getGalleryWidth(),
       popupIndex: -1,
-      stars:{}
+      savedImages:[]
     };
   }
 
@@ -79,7 +79,7 @@ class Gallery extends React.Component {
 
   componentWillReceiveProps(props) {
      this.page = 1;
-     this.setState({images: []});
+     if(!props.showSaved) this.setState({images: []});
      this.getImages(props.tag);
    }
 
@@ -127,19 +127,29 @@ class Gallery extends React.Component {
         onClose={this.popupCloseHandler}
         onNext={this.popupNextHandler}
         onPrev={this.popupPrevHandler}
-        showPrevButton={popupIndex > 0}
-        showNextButton={popupIndex < images.length - 1}
+        showPrevButton={popupIndex > 0  && !this.props.showSaved}
+        showNextButton={popupIndex < images.length - 1  && !this.props.showSaved}
       />
     );
   };
 
-  handleStar = (id, isStarred) => {
+  handleSave = (index,savedIndex, isSaved) => {
+    if(isSaved){
     this.setState(prevState => ({
-      stars: {
-        ...prevState.stars,
-        [id]: isStarred
-        }
+      savedImages: [
+        ...prevState.savedImages,
+          prevState.images[index]
+      ]
       }));
+    }
+    else{
+      this.setState(prevState => ({
+        savedImages: [
+          ...prevState.savedImages.slice(0, savedIndex),
+          ...prevState.savedImages.slice(savedIndex + 1)
+        ]
+        }));
+    }
   }
 
   deleteHandler = index => {
@@ -157,7 +167,10 @@ class Gallery extends React.Component {
     });
   };
 
-  renderImage = (dto, index) => (
+  renderImage = (dto) => {
+    const index = this.state.images.findIndex(image => image.id == dto.id);
+    const savedIndex = this.state.savedImages.findIndex(image => image.id == dto.id);
+    return(
     <Image
       key={`image-${dto.id}`}
       dto={dto}
@@ -165,16 +178,16 @@ class Gallery extends React.Component {
       onDelete={() => this.deleteHandler(index)}
       onExpand={() => this.expandHandler(index)}
       onReorder={this.handleReorder}
-      onStarred={(isStarred) => this.handleStar(dto.id,isStarred)}
-      isStarred={this.state.stars[dto.id]}
+      onSaved={(isSaved) => this.handleSave(index,savedIndex,isSaved)}
+      isSaved={savedIndex > -1}
     />
-  );
+  )};
 
   render() {
     return (
       <div className="gallery-root">
       {this.renderPopup()}
-      {this.state.images.map(this.renderImage)}
+      {this.props.showSaved ?  this.state.savedImages.map(this.renderImage) : this.state.images.map(this.renderImage)}
       </div>
     );
   }

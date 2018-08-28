@@ -11,13 +11,13 @@ class App extends React.Component {
     super();
     this.state = {
       tag: 'art',
-      showStars: false
+      showSaved: false
     };
   }
 
-allStarHandler = ()=>{
+allSavedHandler = ()=>{
   this.setState(prevState => ({
-      showStars: !prevState.showStars
+      showSaved: !prevState.showSaved
     }));
   }
 
@@ -27,9 +27,9 @@ allStarHandler = ()=>{
         <div className="app-header">
           <h2>Flickr Gallery</h2>
           <input className="app-input" onChange={event => this.setState({tag: event.target.value})} value={this.state.tag}/>
-          <FontAwesome  className="stars" style={{color: this.state.showStars ? 'yellow' : 'white'}} name="star" title="star"  onClick={this.allStarHandler}/>
+          <FontAwesome  className="save" style={{color: this.state.showSaved ? 'blue' : 'white'}} name="save" title="save"  onClick={this.allSavedHandler}/>
         </div>
-        <Gallery tag={this.state.tag} showStars={this.state.showStars}/>
+        <Gallery tag={this.state.tag} showSaved={this.state.showSaved}/>
       </div>
     );
   }
